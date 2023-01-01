@@ -1,0 +1,63 @@
+package day02_DriverMethods;
+
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.time.Duration;
+
+public class C01_Examples {
+    public static void main(String[] args) {
+        /*
+        ilk once browser i maximize yapalim sonra tum sayfa icin max bekleme suresi 15 saniye belirleyelim
+        sirasiyla amazon ,facebook , youtube sayfalaina gidelim
+        amazon sayfasina tekrar donelim
+        amazon sayfasinin url nin htts://www.amazon.com/adresine esit oldugunu test edelim
+        sayfanin konumunu ve size yazdiralim
+        istediginiz sekilde oldugunu test edelim.
+        ve sayfayi kapatalim
+
+         */
+
+        System.setProperty("webdriver.chrome.driver", "src/resources/drivers/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
+        driver.get("https://www.amazon.com/");
+        driver.get("https://www.facebook.com/");
+        driver.get("https://www.youtube.com/");
+
+        driver.navigate().back(); //ilk olarak  facebook a geri gider
+        driver.navigate().back(); // facebook sonrasinda amazona gidebilir
+
+        String actualUrl= driver.getCurrentUrl();
+        String expectedUrl="https://www.amazon.com/";
+        if(actualUrl.equals(expectedUrl)){
+            System.out.println("Url Testi PASSED");
+        }else System.out.println("Url Testi FAILED");
+
+        System.out.println("Sayfanin size' i= "+ driver.manage().window().getSize());
+        System.out.println("sayfanin konumu =" + driver.manage().window().getPosition());
+
+        driver.manage().window().setSize(new Dimension(600,600));
+        driver.manage().window().setPosition(new Point(50,50));
+        System.out.println("Sayfanin yeni size' i= "+ driver.manage().window().getSize());
+        System.out.println("sayfanin yeni konumu =" + driver.manage().window().getPosition());
+
+        Dimension actualYenisize =driver.manage().window().getSize();
+        if(actualYenisize.getWidth()==600 && actualYenisize.getHeight()==600){
+            System.out.println("Size testi PASSED");
+        }else System.out.println("Size testi FAILED");
+
+        Point actualYeniKonum = driver.manage().window().getPosition();
+        if(actualYeniKonum.getX()==50 && actualYeniKonum.getY()==50){
+            System.out.println("Konum  testi PASSED");
+        }else System.out.println("Konum testi FAILED");
+
+        driver.close();
+
+    }
+}
